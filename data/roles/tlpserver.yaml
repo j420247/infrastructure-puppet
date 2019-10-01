@@ -2019,6 +2019,12 @@ vhosts_asf::vhosts::vhosts:
       RewriteCond %%{}{HTTP_HOST} ^([^.]+)\.us.ipv4.apache.org$
       RewriteRule ^/mail/(.*)$ http://mail-archives.apache.org/mod_mbox/%1-$1 [R=301,L]
 
+      # Rewrite output/ to main dir if present, for pelican builds
+      RewriteCond %%{}{HTTP_HOST} ^([-a-z0-9]+?).apache\.org$
+      RewriteCond /x1/%1/output -d
+      RewriteRule ^(.*)$ %%{}{HTTP_HOST}$1 [C]
+      RewriteRule ^([-a-z0-9]+?)\.apache\.org/(.*) /x1/$1/output/$2
+
       SetEnvIf Host ^([^.]+) HOST_UNQUALIFIED=$1
       # Filter website to add Attic header if marker directory is present
       LuaOutputFilter attic "/www/attic.apache.org/scripts/attic_filter.lua" output_filter
@@ -2108,6 +2114,12 @@ vhosts_asf::vhosts::vhosts:
       #/mail/* -> mail-archives.a.o/mod_mbox/tlp-list
       RewriteCond %%{}{HTTP_HOST} ^([^.]+)\.us.ipv4.apache.org$
       RewriteRule ^/mail/(.*)$ https://mail-archives.apache.org/mod_mbox/%1-$1 [R=301,L]
+      
+      # Rewrite output/ to main dir if present, for pelican builds
+      RewriteCond %%{}{HTTP_HOST} ^([-a-z0-9]+?).apache\.org$
+      RewriteCond /x1/%1/output -d
+      RewriteRule ^(.*)$ %%{}{HTTP_HOST}$1 [C]
+      RewriteRule ^([-a-z0-9]+?)\.apache\.org/(.*) /x1/$1/output/$2
 
       SetEnvIf Host ^([^.]+) HOST_UNQUALIFIED=$1
       # Filter website to add Attic header if marker directory is present
